@@ -11,6 +11,7 @@ export interface OrderedProps {
     price: number;
     coins_used: number;
     price_after_reduce: number;
+    date: Date;
     billing_address?: number;
     user_id?: number;
     send_id?: number;
@@ -37,6 +38,9 @@ export default function (sequelize: Sequelize): ModelCtor<OrderedInstance> {
         },
         price_after_reduce: {
             type: DataTypes.FLOAT,
+        },
+        date: {
+            type: DataTypes.DATE,
         },
         billing_address: {
             type: DataTypes.BIGINT,

@@ -9,7 +9,7 @@ import {
 export interface MediaProps {
     id: number;
     name: string;
-    path: string;
+    path?: string;
     client_view: boolean;
     media_type_id?: number;
     user_save?: number;

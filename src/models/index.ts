@@ -14,7 +14,6 @@ import sendCreator, {SendInstance} from "./send.model";
 import sessionCreator, {SessionInstance} from "./session.model";
 import userCreator, {UserInstance} from "./user.model";
 import userAddressCreator, {UserAddressInstance} from "./userAddress.model";
-import {Session} from "inspector";
 
 export interface SequelizeManagerProps {
     sequelize: Sequelize;

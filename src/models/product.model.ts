@@ -10,8 +10,8 @@ export interface ProductProps {
     id: number;
     name: string;
     description: string;
-    serial_number: string;
-    price: number;
+    serial_number?: string;
+    price?: number;
     piece_of?: number;
     entrepot_store_id?: number;
 }
