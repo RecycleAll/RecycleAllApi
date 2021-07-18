@@ -90,7 +90,7 @@ export class SequelizeManager implements SequelizeManagerProps{
 
         SequelizeManager.associate(managerProps);
         await sequelize.sync({
-            force: true //Permet de recréer toutes les tables
+            // force: true //Permet de recréer toutes les tables
         });
 
         return new SequelizeManager(managerProps);

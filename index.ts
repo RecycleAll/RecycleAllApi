@@ -6,9 +6,12 @@ import bodyParser from "body-parser";
 import {buildRoutes} from "./src/routes";
 import {SequelizeManager} from "./src/models";
 
+import cors from 'cors';
+
 const app: Express = express();
 
 app.use(bodyParser.json());
+app.use(cors())
 
 buildRoutes(app);
 
