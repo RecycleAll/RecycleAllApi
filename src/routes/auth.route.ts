@@ -81,7 +81,7 @@ authRouter.post("/login", async function (req, res){
         res.status(201);
         res.json(session);
     } else {
-        res.status(404).end();
+        res.status(409).end();
         return;
     }
 });
