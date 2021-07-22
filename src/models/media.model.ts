@@ -10,6 +10,7 @@ export interface MediaProps {
     id: number;
     name: string;
     path?: string;
+    mimetype?: string;
     client_view: boolean;
     media_type_id?: number;
     user_save?: number;
@@ -32,6 +33,9 @@ export default function (sequelize: Sequelize): ModelCtor<MediaInstance> {
             type: DataTypes.STRING,
         },
         path: {
+            type: DataTypes.STRING,
+        },
+        mimetype: {
             type: DataTypes.STRING,
         },
         client_view: {

@@ -2,29 +2,16 @@ import express from "express";
 import {MediaController} from "../controllers/media.controller";
 import validator from "validator";
 import isNumeric = validator.isNumeric;
-import {FileController} from "../controllers/file.controller";
 import multer from "multer";
 import * as fs from "fs";
 
 const mediaRouter = express.Router();
-// const storage = FileController.getInstance().getStorage();
-// const storage = multer.diskStorage({
-//     destination: (req, file, callback) => {
-//         // callback(null, process.env.PATH_FOLDER)
-//         callback(null, "C:/_DEV/_0_PA/data/")
-//     },
-//     filename: (req, file, callback) => {
-//         // const {id} = req.body;
-//         callback(null, file.filename)
-//     }
-// });
-// const upload = multer({storage: storage});
 
-const UPLOAD_PATH = "C:/_DEV/_0_PA/data/";
+const UPLOAD_PATH = process.env.PATH_FOLDER;
 const upload = multer({ dest: `${UPLOAD_PATH}`});
 
 mediaRouter.post("/", async function(req, res){
-    const {name, path, client_view, media_type_id, user_save} = req.body;
+    const {name, path, mimetype, client_view, media_type_id, user_save} = req.body;
 
     if (
         name === undefined ||
@@ -40,6 +27,7 @@ mediaRouter.post("/", async function(req, res){
     const media = await mediaController.create({
         name,
         path,
+        mimetype,
         client_view,
         media_type_id,
         user_save,
@@ -59,16 +47,54 @@ mediaRouter.post("/file", upload.single('uploaded_file'), async function (req, r
     console.log("Body : ", req.body);
     console.log("ID : ", req.body.id);
     // console.log("", req.)
-    res.send(req.file);
+
+    const {id, name, client_view, media_type_id, user_save} = req.body;
+
+    if (req.file?.path === undefined && req.file?.mimetype === undefined){
+        res.status(409).end();
+        return;
+    }
+
+    const mediaController = await MediaController.getInstance();
+    const media = await mediaController.update({
+        id,
+        name,
+        path: req.file.path,
+        mimetype: req.file.mimetype,
+        client_view,
+        media_type_id,
+        user_save
+    });
+
+    if (media != null){
+        res.status(200);
+        res.json(media);
+    } else {
+        res.status(400).end();
+    }
 });
 
 mediaRouter.get('/file/:id', async function (req, res){
-    const {id} = req.params;
-    const path = "C:\\_DEV\\_0_PA\\data\\fdac9994b84bd28978a926cb97e2cf61";
 
-    res.setHeader('Content-Type', "image/jpeg");
+    const {id} = req.params;
+    const mediaController = await MediaController.getInstance();
+    const media = await mediaController.getOne( Number.parseInt(id) );
+
+    if (media === null){
+        res.status(204).end();
+        return;
+    }
+
+    const path: string | undefined = media.path;
+
+    if (path === undefined || media.mimetype === undefined){
+        res.status(409).end();
+        return;
+    }
+
+    res.setHeader('Content-Type', media.mimetype);
     fs.createReadStream(path).pipe(res);
-})
+});
 
 mediaRouter.get("/", async function(req, res){
     const mediaController = await MediaController.getInstance();
@@ -102,7 +128,7 @@ mediaRouter.get("/:id", async function(req, res){
 });
 
 mediaRouter.put("/", async function (req, res){
-    const {id, name, path, client_view, media_type_id, user_save} = req.body;
+    const {id, name, path, mimetype, client_view, media_type_id, user_save} = req.body;
 
     if ( id === undefined ) {
         res.status(400).end();
@@ -114,6 +140,7 @@ mediaRouter.put("/", async function (req, res){
         id,
         name,
         path,
+        mimetype,
         client_view,
         media_type_id,
         user_save,
