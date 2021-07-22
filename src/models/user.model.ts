@@ -40,7 +40,7 @@ export default function(sequelize: Sequelize): ModelCtor<UserInstance> {
         },
         email: {
             type: DataTypes.STRING,
-            unique: true
+            // unique: true
         },
         recycle_coins: {
             type: DataTypes.BIGINT
