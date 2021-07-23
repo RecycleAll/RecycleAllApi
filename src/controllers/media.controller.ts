@@ -53,6 +53,14 @@ export class MediaController{
         return this.Media.findAll();
     }
 
+    public async getAllByIds(ids: number[]): Promise<MediaInstance[] | null >{
+        return this.Media.findAll({
+            where: {
+                id: ids
+            }
+        })
+    }
+
     public async getOne(id: number): Promise<MediaInstance | null>{
         return this.Media.findOne({
             where: {
