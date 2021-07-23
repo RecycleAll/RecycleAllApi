@@ -108,6 +108,20 @@ mediaRouter.get("/", async function(req, res){
     }
 });
 
+mediaRouter.get("/ids", async function (req, res){
+    const {ids} = req.body;
+
+    const mediaController = await MediaController.getInstance();
+    const medias = await mediaController.getAllByIds(ids);
+
+    if (medias != null){
+        res.status(200);
+        res.json(medias);
+    }else{
+        res.status(409).end();
+    }
+});
+
 mediaRouter.get("/:id", async function(req, res){
     const {id} = req.params;
 
