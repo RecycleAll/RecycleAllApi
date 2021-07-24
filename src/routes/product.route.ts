@@ -72,6 +72,25 @@ productRouter.get("/:id", async function (req, res){
     }
 });
 
+productRouter.get('/don/:id', async function(req,res ){
+    const {id} = req.params;
+
+    if (!isNumeric(id)){
+        res.status(409).end();
+        return;
+    }
+
+    const productController = await ProductController.getInstance();
+    const products = await productController.getAllByDon(Number.parseInt(id));
+
+    if (products != null){
+        res.status(200);
+        res.json(products);
+    }else{
+        res.status(204).end();
+    }
+});
+
 productRouter.put("/", async function(req, res){
     const {
         id,

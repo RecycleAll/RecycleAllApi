@@ -2,25 +2,29 @@ import {ModelCtor} from "sequelize";
 import {ProductCreationProps, ProductInstance, ProductProps} from "../models/product.model";
 import {EntrepotInstance} from "../models/entrepot.model";
 import {SequelizeManager} from "../models";
+import {DonInstance} from "../models/don.model";
+import {OrderedProductInstance} from "../models/orderedProduct.model";
 
 export class ProductController{
 
     Product: ModelCtor<ProductInstance>;
     Entrepot: ModelCtor<EntrepotInstance>;
+    Don: ModelCtor<DonInstance>
 
     private static instance: ProductController;
 
     public static async getInstance(): Promise<ProductController> {
         if (ProductController.instance === undefined){
-            const {Product, Entrepot} = await SequelizeManager.getInstance();
-            ProductController.instance = new ProductController(Product, Entrepot);
+            const {Product, Entrepot, Don} = await SequelizeManager.getInstance();
+            ProductController.instance = new ProductController(Product, Entrepot, Don);
         }
         return ProductController.instance;
     }
 
-    private constructor(Product: ModelCtor<ProductInstance>, Entrepot: ModelCtor<EntrepotInstance>) {
+    private constructor(Product: ModelCtor<ProductInstance>, Entrepot: ModelCtor<EntrepotInstance>, Don: ModelCtor<DonInstance>) {
         this.Product = Product;
         this.Entrepot = Entrepot;
+        this.Don = Don;
     }
 
     public async create(props: ProductCreationProps): Promise<ProductInstance | null>{
@@ -44,6 +48,14 @@ export class ProductController{
             if (entrepot == null){
                 return null;
             }
+        }
+
+        if (props.don_id != undefined){
+            const don = await  this.Don.findOne({
+                where: {
+                    id: props.don_id
+                }
+            })
         }
 
         return this.Product.create( props );
@@ -84,6 +96,17 @@ export class ProductController{
             }
         }
 
+        if (props.don_id != undefined){
+            const don = await this.Don.findOne({
+                where: {
+                    id: props.don_id
+                }
+            });
+            if (don == null){
+                return null;
+            }
+        }
+
         const product = await ProductController.instance.getOne( props.id );
         if (product != null){
             return product.update( props );
@@ -103,14 +126,7 @@ export class ProductController{
         return 0;
     }
 
-
-
-
-
-
-
-
-
-
-
+    public async getAllByDon(don_id: any): Promise<ProductInstance[] | null> {
+        return this.Product.findAll({where : {don_id}});
+    }
 }

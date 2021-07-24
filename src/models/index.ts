@@ -2,7 +2,6 @@ import {Dialect, ModelCtor, Sequelize} from "sequelize";
 
 import addressCreator, {AddressInstance} from "./address.model";
 import donCreator, {DonInstance} from "./don.model";
-import donProductCreator, {DonProductInstance} from "./donProduct.model";
 import entrepotCreator, {EntrepotInstance} from "./entrepot.model";
 import mediaCreator, {MediaInstance} from "./media.model";
 import mediaProductCreator, {MediaProductInstance} from "./mediaProduct.model";
@@ -19,7 +18,6 @@ export interface SequelizeManagerProps {
     sequelize: Sequelize;
     Address: ModelCtor<AddressInstance>;
     Don: ModelCtor<DonInstance>;
-    DonProduct: ModelCtor<DonProductInstance>;
     Entrepot: ModelCtor<EntrepotInstance>;
     Media: ModelCtor<MediaInstance>;
     MediaProduct: ModelCtor<MediaProductInstance>;
@@ -38,7 +36,6 @@ export class SequelizeManager implements SequelizeManagerProps{
     sequelize: Sequelize;
     Address: ModelCtor<AddressInstance>;
     Don: ModelCtor<DonInstance>;
-    DonProduct: ModelCtor<DonProductInstance>;
     Entrepot: ModelCtor<EntrepotInstance>;
     Media: ModelCtor<MediaInstance>;
     MediaProduct: ModelCtor<MediaProductInstance>;
@@ -74,7 +71,6 @@ export class SequelizeManager implements SequelizeManagerProps{
             sequelize,
             Address: addressCreator(sequelize),
             Don: donCreator(sequelize),
-            DonProduct: donProductCreator(sequelize),
             Entrepot: entrepotCreator(sequelize),
             Media: mediaCreator(sequelize),
             MediaProduct: mediaProductCreator(sequelize),
@@ -114,20 +110,15 @@ export class SequelizeManager implements SequelizeManagerProps{
             foreignKey: "product_id"
         });
 
-        //DonProduct associations
-        props.Don.belongsToMany(props.Product, {
-            through: {
-                model: props.DonProduct,
-                unique: false
-            },
-            foreignKey: "don_id"
+        //Association between Don and Product
+        props.Don.hasMany(props.Product, {
+            foreignKey: {
+                name: "don_id",
+                allowNull: true
+            }
         });
-        props.Product.belongsToMany(props.Don, {
-            through: {
-                model: props.DonProduct,
-                unique: false
-            },
-            foreignKey: "product_id"
+        props.Product.belongsTo(props.Don, {
+            foreignKey: "don_id"
         });
 
         //OrderedProduct associations
@@ -299,7 +290,6 @@ export class SequelizeManager implements SequelizeManagerProps{
         this.sequelize = props.sequelize;
         this.Address = props.Address;
         this.Don = props.Don;
-        this.DonProduct = props.DonProduct;
         this.Entrepot = props.Entrepot;
         this.Media = props.Media;
         this.MediaProduct = props.MediaProduct;

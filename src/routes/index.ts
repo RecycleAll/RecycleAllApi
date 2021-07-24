@@ -2,7 +2,6 @@ import {Express} from "express";
 import {addressRouter} from "./address.route";
 import {authRouter} from "./auth.route";
 import {donRouter} from "./don.route";
-import {donProductRouter} from "./donProduct.route";
 import {entrepotRouter} from "./entrepot.route";
 import {mediaRouter} from "./media.route";
 import {mediaProductRouter} from "./mediaProduct.route";
@@ -17,7 +16,6 @@ export function buildRoutes(app: Express) {
     app.use("/address", addressRouter);
     app.use("/auth", authRouter);
     app.use("/don", donRouter);
-    app.use("/donProduct", donProductRouter);
     app.use("/entrepot", entrepotRouter);
     app.use("/media", mediaRouter);
     app.use("/mediaProduct", mediaProductRouter);
