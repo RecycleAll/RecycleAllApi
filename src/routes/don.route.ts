@@ -78,7 +78,7 @@ donRouter.get('/user/:id', async function(req,res ){
     }
 
     const donController = await DonController.getInstance();
-    const don = await donController.getAllByUser(Number.parseInt(id)); //TODO
+    const don = await donController.getAllByUser(Number.parseInt(id));
 
     if (don != null){
         res.status(200);
