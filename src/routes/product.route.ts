@@ -12,7 +12,8 @@ productRouter.post("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id
     } = req.body;
 
     if (
@@ -30,7 +31,8 @@ productRouter.post("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id
     });
 
     if (product != null){
@@ -99,7 +101,8 @@ productRouter.put("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id
     } = req.body;
 
     if ( id === undefined ) {
@@ -115,7 +118,8 @@ productRouter.put("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id
     });
 
     if (product != null){
