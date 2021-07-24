@@ -49,6 +49,14 @@ export class DonController{
         });
     }
 
+    public async getAllByUser(user_id: number): Promise<DonInstance | null>{
+        return this.Don.findOne({
+            where: {
+                user_id
+            }
+        });
+    }
+
     public async update(props: DonProps): Promise<DonInstance | null>{
         if (props.user_id != undefined){
             const user = await this.User.findOne({

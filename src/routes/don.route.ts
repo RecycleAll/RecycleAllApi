@@ -38,7 +38,7 @@ donRouter.post("/", async function(req, res){
     }
 });
 
-donRouter.get("/", async function (req, res){
+donRouter.get("/all", async function (req, res){
     const donController = await DonController.getInstance();
     const dons = await donController.getAll();
 
@@ -50,7 +50,7 @@ donRouter.get("/", async function (req, res){
     }
 });
 
-donRouter.get('/:id', async function(req,res ){
+donRouter.get('/one/:id', async function(req,res ){
     const {id} = req.params;
 
     if (!isNumeric(id)){
@@ -69,6 +69,25 @@ donRouter.get('/:id', async function(req,res ){
     }
 });
 
+donRouter.get('/user/:id', async function(req,res ){
+    const {id} = req.params;
+
+    if (!isNumeric(id)){
+        res.status(409).end();
+        return;
+    }
+
+    const donController = await DonController.getInstance();
+    const don = await donController.getAllByUser(Number.parseInt(id)); //TODO
+
+    if (don != null){
+        res.status(200);
+        res.json(don);
+    }else{
+        res.status(204).end();
+    }
+});
+
 donRouter.put("/", async function (req, res){
     let {id, date, coins_win, user_id} = req.body;
 
@@ -76,10 +95,7 @@ donRouter.put("/", async function (req, res){
         res.status(400).end();
         return;
     }
-    if (!isNumeric(id)){
-        res.status(409).end();
-        return;
-    }
+
     if (date != undefined){
         const parsedDate = parseDate(date);
         if (parsedDate == null){
