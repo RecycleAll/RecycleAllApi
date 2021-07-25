@@ -15,6 +15,7 @@ export interface ProductProps {
     piece_of?: number;
     entrepot_store_id?: number;
     don_id?: number;
+    order_id?: number;
 }
 
 export interface ProductCreationProps extends Optional<ProductProps, "id"> {}
@@ -49,6 +50,9 @@ export default function(sequelize: Sequelize): ModelCtor<ProductInstance> {
             type: DataTypes.BIGINT,
         },
         don_id: {
+            type: DataTypes.BIGINT
+        },
+        order_id: {
             type: DataTypes.BIGINT
         }
     }, {

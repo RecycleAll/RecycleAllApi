@@ -7,7 +7,6 @@ import mediaCreator, {MediaInstance} from "./media.model";
 import mediaProductCreator, {MediaProductInstance} from "./mediaProduct.model";
 import mediaTypeCreator, {MediaTypeInstance} from "./mediaType.model";
 import orderedCreator, {OrderedInstance} from "./ordered.model";
-import orderedProductCreator, {OrderedProductInstance} from "./orderedProduct.model";
 import productCreator, {ProductInstance} from "./product.model";
 import sendCreator, {SendInstance} from "./send.model";
 import sessionCreator, {SessionInstance} from "./session.model";
@@ -23,7 +22,6 @@ export interface SequelizeManagerProps {
     MediaProduct: ModelCtor<MediaProductInstance>;
     MediaType: ModelCtor<MediaTypeInstance>;
     Ordered: ModelCtor<OrderedInstance>;
-    OrderedProduct: ModelCtor<OrderedProductInstance>;
     Product: ModelCtor<ProductInstance>;
     Send: ModelCtor<SendInstance>;
     Session: ModelCtor<SessionInstance>;
@@ -41,7 +39,6 @@ export class SequelizeManager implements SequelizeManagerProps{
     MediaProduct: ModelCtor<MediaProductInstance>;
     MediaType: ModelCtor<MediaTypeInstance>;
     Ordered: ModelCtor<OrderedInstance>;
-    OrderedProduct: ModelCtor<OrderedProductInstance>;
     Product: ModelCtor<ProductInstance>;
     Send: ModelCtor<SendInstance>;
     Session: ModelCtor<SessionInstance>;
@@ -76,7 +73,6 @@ export class SequelizeManager implements SequelizeManagerProps{
             MediaProduct: mediaProductCreator(sequelize),
             MediaType: mediaTypeCreator(sequelize),
             Ordered: orderedCreator(sequelize),
-            OrderedProduct: orderedProductCreator(sequelize),
             Product: productCreator(sequelize),
             Send: sendCreator(sequelize),
             Session: sessionCreator(sequelize),
@@ -122,18 +118,13 @@ export class SequelizeManager implements SequelizeManagerProps{
         });
 
         //OrderedProduct associations
-        props.Ordered.belongsToMany(props.Product, {
-            through: {
-                model: props.OrderedProduct,
-                unique: false
-            },
-            foreignKey: "ordered_id"
+        props.Ordered.hasMany(props.Product, {
+            foreignKey: {
+                name: "order_id",
+                allowNull: true
+            }
         });
-        props.Product.belongsToMany(props.Ordered, {
-            through: {
-                model: props.OrderedProduct,
-                unique: false
-            },
+        props.Product.belongsTo(props.Ordered, {
             foreignKey: "product_id"
         });
 
@@ -295,7 +286,6 @@ export class SequelizeManager implements SequelizeManagerProps{
         this.MediaProduct = props.MediaProduct;
         this.MediaType = props.MediaType;
         this.Ordered = props.Ordered;
-        this.OrderedProduct = props.OrderedProduct;
         this.Product = props.Product;
         this.Send = props.Send;
         this.Session = props.Session;

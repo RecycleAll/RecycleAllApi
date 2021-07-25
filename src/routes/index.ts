@@ -7,7 +7,6 @@ import {mediaRouter} from "./media.route";
 import {mediaProductRouter} from "./mediaProduct.route";
 import {mediaTypeRouter} from "./mediaType.route";
 import {orderedRouter} from "./ordered.route";
-import {orderedProductRouter} from "./orderedProduct.route";
 import {productRouter} from "./product.route";
 import {sendRouter} from "./send.route";
 import {userAddressRouter} from "./userAddress.route";
@@ -21,7 +20,6 @@ export function buildRoutes(app: Express) {
     app.use("/mediaProduct", mediaProductRouter);
     app.use("/mediaType", mediaTypeRouter);
     app.use("/ordered", orderedRouter);
-    app.use("/orderedProduct", orderedProductRouter);
     app.use("/product", productRouter);
     app.use("/send", sendRouter);
     app.use("/userAddress", userAddressRouter);
