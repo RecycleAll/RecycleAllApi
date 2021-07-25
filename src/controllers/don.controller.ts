@@ -49,8 +49,8 @@ export class DonController{
         });
     }
 
-    public async getAllByUser(user_id: number): Promise<DonInstance | null>{
-        return this.Don.findOne({
+    public async getAllByUser(user_id: number): Promise<DonInstance[] | null>{
+        return this.Don.findAll({
             where: {
                 user_id
             }

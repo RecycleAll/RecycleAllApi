@@ -12,7 +12,9 @@ productRouter.post("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id,
+        order_id
     } = req.body;
 
     if (
@@ -30,7 +32,9 @@ productRouter.post("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id,
+        order_id
     });
 
     if (product != null){
@@ -72,6 +76,44 @@ productRouter.get("/:id", async function (req, res){
     }
 });
 
+productRouter.get('/don/:id', async function(req,res ){
+    const {id} = req.params;
+
+    if (!isNumeric(id)){
+        res.status(409).end();
+        return;
+    }
+
+    const productController = await ProductController.getInstance();
+    const products = await productController.getAllByDon(Number.parseInt(id));
+
+    if (products != null){
+        res.status(200);
+        res.json(products);
+    }else{
+        res.status(204).end();
+    }
+});
+
+productRouter.get('/order/:id', async function(req,res ){
+    const {id} = req.params;
+
+    if (!isNumeric(id)){
+        res.status(409).end();
+        return;
+    }
+
+    const productController = await ProductController.getInstance();
+    const products = await productController.getAllByOrder(Number.parseInt(id));
+
+    if (products != null){
+        res.status(200);
+        res.json(products);
+    }else{
+        res.status(204).end();
+    }
+});
+
 productRouter.put("/", async function(req, res){
     const {
         id,
@@ -80,7 +122,9 @@ productRouter.put("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id,
+        order_id
     } = req.body;
 
     if ( id === undefined ) {
@@ -96,7 +140,9 @@ productRouter.put("/", async function(req, res){
         serial_number,
         price,
         piece_of,
-        entrepot_store_id
+        entrepot_store_id,
+        don_id,
+        order_id
     });
 
     if (product != null){
