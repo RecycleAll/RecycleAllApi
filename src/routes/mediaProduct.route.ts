@@ -112,7 +112,7 @@ mediaProductRouter.put("/", async function (req, res){
     });
 
     if (mediaProduct != null){
-        res.status(201);
+        res.status(200);
         res.json(mediaProduct)
     }else{
         res.status(409).end();
