@@ -34,6 +34,10 @@ export class DonController{
             return null;
         }
 
+        if (props.coins_win != undefined){
+            await this.addCoins(user, null, props.coins_win);
+        }
+
         return this.Don.create( props );
     }
 
@@ -58,18 +62,24 @@ export class DonController{
     }
 
     public async update(props: DonProps): Promise<DonInstance | null>{
+        let user;
         if (props.user_id != undefined){
-            const user = await this.User.findOne({
+            user = await this.User.findOne({
                 where: {
                     id: props.user_id
                 }
             });
-            if (user == null){
-                return null;
-            }
+        }
+        if (user == null){
+            return null;
         }
 
         const don = await DonController.instance.getOne(props.id);
+
+        if (props.coins_win !== undefined){
+            await this.addCoins(user, don, props.coins_win)
+        }
+
         if (don != null){
             return don.update( props );
         }
@@ -87,5 +97,19 @@ export class DonController{
             });
         }
         return 0;
+    }
+
+    private async addCoins(user: UserInstance, don: DonInstance | null, coins: number) {
+        let final_coins = coins;
+        if (don !== null && don.coins_win !== undefined ){
+            final_coins = coins - don.coins_win;
+        }
+        await this.User.update({
+            recycle_coins: user.recycle_coins + final_coins
+        }, {
+            where: {
+                id: user.id
+            }
+        });
     }
 }
