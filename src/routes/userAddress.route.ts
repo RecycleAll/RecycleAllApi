@@ -112,7 +112,7 @@ userAddressRouter.put("/", async function (req, res){
     });
 
     if (userAddress != null){
-        res.status(201);
+        res.status(200);
         res.json(userAddress)
     }else{
         res.status(409).end();
