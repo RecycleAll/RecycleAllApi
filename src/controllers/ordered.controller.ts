@@ -4,28 +4,31 @@ import {UserInstance} from "../models/user.model";
 import {AddressInstance} from "../models/address.model";
 import {SendInstance} from "../models/send.model";
 import {SequelizeManager} from "../models";
+import {ProductInstance} from "../models/product.model";
 
 export class OrderedController{
     Ordered: ModelCtor<OrderedInstance>;
     Address: ModelCtor<AddressInstance>;
     User: ModelCtor<UserInstance>;
     Send: ModelCtor<SendInstance>;
+    Product: ModelCtor<ProductInstance>;
 
     private static instance: OrderedController;
 
     public static async getInstance(): Promise<OrderedController>{
         if (OrderedController.instance === undefined){
-            const {Ordered,Address,User,Send} = await SequelizeManager.getInstance();
-            OrderedController.instance = new OrderedController(Ordered, Address,User,Send);
+            const {Ordered,Address,User,Send,Product} = await SequelizeManager.getInstance();
+            OrderedController.instance = new OrderedController(Ordered, Address,User,Send,Product);
         }
         return OrderedController.instance;
     }
 
-    private constructor(Ordered: ModelCtor<OrderedInstance>, Address: ModelCtor<AddressInstance>, User: ModelCtor<UserInstance>, Send: ModelCtor<SendInstance>) {
+    private constructor(Ordered: ModelCtor<OrderedInstance>, Address: ModelCtor<AddressInstance>, User: ModelCtor<UserInstance>, Send: ModelCtor<SendInstance>, Product: ModelCtor<ProductInstance>) {
         this.Ordered = Ordered;
         this.Address = Address;
         this.User = User;
         this.Send = Send;
+        this.Product = Product;
     }
 
     public async create(props: OrderedCreationProps): Promise<OrderedInstance | null>{
@@ -126,11 +129,21 @@ export class OrderedController{
     public async delete(id: number): Promise<number>{
         const ordered = await OrderedController.instance.getOne( id );
         if (ordered != null){
-            return this.Ordered.destroy({
+            const count = await this.Ordered.destroy({
                 where: {
                     id
                 }
             });
+
+            const products = await this.Product.update({
+                order_id: undefined
+            }, {
+                where: {
+                    order_id: id
+                }
+            });
+
+            return count;
         }
         return 0;
     }
