@@ -10,8 +10,10 @@ import {orderedRouter} from "./ordered.route";
 import {productRouter} from "./product.route";
 import {sendRouter} from "./send.route";
 import {userAddressRouter} from "./userAddress.route";
+import {coinRouter} from "./coin.route";
 
 export function buildRoutes(app: Express) {
+    app.use("/coin", coinRouter);
     app.use("/address", addressRouter);
     app.use("/auth", authRouter);
     app.use("/don", donRouter);

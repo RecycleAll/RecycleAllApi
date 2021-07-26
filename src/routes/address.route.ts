@@ -1,6 +1,5 @@
 import express from "express";
 import {AddressController} from "../controllers/address.controller";
-import {isNumber} from "util";
 import validator from "validator";
 import isNumeric = validator.isNumeric;
 
