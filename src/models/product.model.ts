@@ -41,7 +41,7 @@ export default function(sequelize: Sequelize): ModelCtor<ProductInstance> {
             type: DataTypes.STRING,
         },
         price: {
-            type: DataTypes.BIGINT,
+            type: DataTypes.FLOAT,
         },
         piece_of: {
             type: DataTypes.BIGINT,
